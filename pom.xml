@@ -19,6 +19,7 @@
     <modules>
         <module>auth-service</module>
         <module>discovery-service</module>
+        <module>gateway-service</module>
     </modules>
 
     <properties>
