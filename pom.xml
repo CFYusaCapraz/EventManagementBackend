@@ -20,6 +20,7 @@
         <module>auth-service</module>
         <module>discovery-service</module>
         <module>gateway-service</module>
+        <module>event-service</module>
     </modules>
 
     <properties>
