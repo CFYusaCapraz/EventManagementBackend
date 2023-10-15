@@ -1,13 +1,17 @@
-package com.yusacapraz.discovery;
+package com.yusacapraz.event.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
-
     @GetMapping("/hello")
-    public String hello(){
+    public String hello() {
         return "Hello";
+    }
+
+    @GetMapping("/h")
+    public String h() {
+        return "Hello World!";
     }
 }
