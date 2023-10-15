@@ -12,11 +12,11 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder routeLocatorBuilder, AuthenticationFilter authenticationFilter) {
         return routeLocatorBuilder.routes()
-                .route("AUTH-SERVICE", r -> r.path("/api/auth/**").uri("lb://AUTH-SERVICE"))
-                .route("DISCOVERY-SERVICE", r -> r.path("/hello")
+                .route("auth-service", r -> r.path("/api/auth/**").uri("lb://AUTH-SERVICE"))
+                .route("event-service", r -> r.path("/hello", "/h")
                         .filters(f -> f.filter(authenticationFilter.
                                 apply(new AuthenticationFilter.Config())))
-                        .uri("lb://DISCOVERY-SERVICE"))
+                        .uri("lb://EVENT-SERVICE"))
                 .build();
     }
 }
