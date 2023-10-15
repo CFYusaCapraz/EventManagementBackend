@@ -1,14 +1,16 @@
 package com.yusacapraz.gateway.filter;
 
 import com.yusacapraz.gateway.model.DTOs.ValidateDTO;
+import com.yusacapraz.gateway.service.GatewayService;
 import com.yusacapraz.gateway.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
@@ -16,8 +18,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     private RouteValidator routeValidator;
     @Autowired
     private JwtUtils jwtUtils;
+
     @Autowired
-    private RestTemplate restTemplate;
+    private GatewayService gatewayService;
 
     public AuthenticationFilter() {
         super(Config.class);
@@ -37,12 +40,24 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 ValidateDTO validateDTO = ValidateDTO.builder()
                         .token(token)
                         .requestPath(exchange.getRequest().getPath().toString()).build();
-                ResponseEntity<String> response = restTemplate.postForEntity(
-                        "http://AUTH-SERVICE/api/auth/validateToken",
-                        validateDTO,
-                        String.class
-                );
 
+                return gatewayService.authenticateToken(validateDTO)
+                        .flatMap(statusCode -> {
+                            if (statusCode == HttpStatus.OK.value()) {
+                                return chain.filter(exchange);
+                            } else {
+                                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                                return exchange.getResponse().setComplete();
+                            }
+                        })
+                        .onErrorResume(WebClientResponseException.class, e -> {
+                            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                                return exchange.getResponse().setComplete();
+                            } else {
+                                return Mono.error(e);
+                            }
+                        });
             }
             return chain.filter(exchange);
         };
