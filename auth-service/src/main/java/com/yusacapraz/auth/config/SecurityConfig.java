@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(configurer -> {
                     configurer.requestMatchers("/api/auth/**").permitAll();
-                    configurer.anyRequest().authenticated();  // Allow all other requests without authentication
+                    configurer.anyRequest().authenticated();  // All other requests must be authenticated
                 })
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
