@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +26,7 @@ public class RefreshToken {
     private UUID refreshToken;
 
     @Column(name = "expiry_date")
-    private Instant expiryDate;
+    private LocalDateTime expiryDate;
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
