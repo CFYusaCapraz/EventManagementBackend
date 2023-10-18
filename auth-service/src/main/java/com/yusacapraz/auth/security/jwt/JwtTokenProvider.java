@@ -26,7 +26,7 @@ public class JwtTokenProvider {
     @Autowired
     private UserService userService;
 
-    public String generateToken(Authentication authentication) {
+    public String generateTokenWithAuthentication(Authentication authentication) {
         SecretKey secretKey = loadSecretKeyFromString(jwtConfig.getSecret());
         JDBCUserDetails principal = (JDBCUserDetails) authentication.getPrincipal();
         Date now = new Date();
@@ -34,6 +34,19 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .subject(principal.user().getUserId().toString())
+                .issuedAt(new Date())
+                .expiration(expiryDate)
+                .signWith(secretKey, Jwts.SIG.HS512)
+                .compact();
+    }
+
+    public String generateTokenWithUserId(UUID userId) {
+        SecretKey secretKey = loadSecretKeyFromString(jwtConfig.getSecret());
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtConfig.getExpirationMs());
+
+        return Jwts.builder()
+                .subject(userId.toString())
                 .issuedAt(new Date())
                 .expiration(expiryDate)
                 .signWith(secretKey, Jwts.SIG.HS512)
