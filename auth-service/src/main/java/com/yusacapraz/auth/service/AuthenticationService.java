@@ -1,10 +1,10 @@
 package com.yusacapraz.auth.service;
 
 import com.yusacapraz.auth.model.APIResponse;
-import com.yusacapraz.auth.model.DTOs.LoginRequestDTO;
-import com.yusacapraz.auth.model.DTOs.LoginResponseDTO;
-import com.yusacapraz.auth.model.DTOs.ValidateRequestDTO;
-import com.yusacapraz.auth.model.DTOs.ValidateResponseDTO;
+import com.yusacapraz.auth.model.DTOs.*;
+import com.yusacapraz.auth.model.RefreshToken;
+import com.yusacapraz.auth.model.exception.RefreshTokenExpiredException;
+import com.yusacapraz.auth.model.exception.RefreshTokenNotFoundException;
 import com.yusacapraz.auth.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AuthenticationService {
+    @Autowired
+    private RefreshTokenService refreshTokenService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -62,6 +66,32 @@ public class AuthenticationService {
         } catch (ExpiredJwtException e) {
             APIResponse<String> response = APIResponse.error("Expired token! Please use the refresh token to get a new access token");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    public ResponseEntity<APIResponse<?>> refreshToken(RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        try {
+            String refreshToken = refreshTokenRequestDTO.getRefreshToken();
+            RefreshToken refreshTokenByToken = refreshTokenService.findRefreshTokenByToken(UUID.fromString(refreshToken));
+
+            // This method will only be called because if the refresh token is expired
+            // RefreshTokenExpiredException exception will be thrown
+            refreshTokenService.isRefreshTokenExpired(refreshTokenByToken);
+
+            UUID userId = refreshTokenByToken.getUser().getUserId();
+            String accessToken = jwtTokenProvider.generateTokenWithUserId(userId);
+
+            RefreshTokenResponseDTO responseDTO = RefreshTokenResponseDTO.builder()
+                    .accessToken(accessToken)
+                    .build();
+            APIResponse<RefreshTokenResponseDTO> response = APIResponse.successWithData(responseDTO, "New access token created.");
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (RefreshTokenNotFoundException e) {
+            APIResponse<String> response = APIResponse.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } catch (RefreshTokenExpiredException e) {
+            APIResponse<String> response = APIResponse.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 }
