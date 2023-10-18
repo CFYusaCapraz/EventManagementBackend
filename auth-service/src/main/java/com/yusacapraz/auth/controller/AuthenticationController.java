@@ -1,6 +1,7 @@
 package com.yusacapraz.auth.controller;
 
 import com.yusacapraz.auth.model.DTOs.LoginRequestDTO;
+import com.yusacapraz.auth.model.DTOs.RefreshTokenRequestDTO;
 import com.yusacapraz.auth.model.DTOs.ValidateRequestDTO;
 import com.yusacapraz.auth.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,10 @@ public class AuthenticationController {
     @PostMapping("/validateToken")
     public ResponseEntity<?> validateToken(@RequestBody ValidateRequestDTO validateRequestDTO) {
         return authenticationService.validateToken(validateRequestDTO);
+    }
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO){
+        return authenticationService.refreshToken(refreshTokenRequestDTO);
     }
 }
