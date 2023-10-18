@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ValidateDTO {
+public class ValidateRequestDTO {
     private String token;
     private String requestPath;
 }
