@@ -32,10 +32,12 @@ public class AuthenticationService {
                             loginRequestDTO.getPassword()
                     )
             );
-            String token = jwtTokenProvider.generateToken(authentication);
+            String accessToken = jwtTokenProvider.generateTokenWithAuthentication(authentication);
+            String refreshToken = refreshTokenService.createRefreshToken(loginRequestDTO.getUsername()).getRefreshToken().toString();
 
             LoginResponseDTO responseDTO = LoginResponseDTO.builder()
-                    .token(token)
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
                     .build();
             APIResponse<LoginResponseDTO> response = APIResponse.successWithData(responseDTO, "Successfully logged in.");
 
@@ -53,14 +55,12 @@ public class AuthenticationService {
                 if (!authentication.isAuthenticated()) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                 }
-                ValidateResponseDTO responseDTO = ValidateResponseDTO.builder()
-                        .build();
-                APIResponse<ValidateResponseDTO> response = APIResponse.successWithData(responseDTO, "Token validated.");
+                APIResponse<String> response = APIResponse.success("Token validated.");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
             return ResponseEntity.internalServerError().build();
         } catch (ExpiredJwtException e) {
-            APIResponse<Object> response = APIResponse.error("Expired token!");
+            APIResponse<String> response = APIResponse.error("Expired token! Please use the refresh token to get a new access token");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }

@@ -1,6 +1,6 @@
 package com.yusacapraz.gateway.service;
 
-import com.yusacapraz.gateway.model.DTOs.ValidateDTO;
+import com.yusacapraz.gateway.model.DTOs.ValidateRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ public class GatewayService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    public Mono<Integer> authenticateToken(ValidateDTO validateDTO){
+    public Mono<Integer> authenticateToken(ValidateRequestDTO validateRequestDTO){
         return webClientBuilder
                 .build()
                 .post()
                 .uri("lb://AUTH-SERVICE/api/auth/validateToken")
-                .bodyValue(validateDTO)
+                .bodyValue(validateRequestDTO)
                 .exchangeToMono(clientResponse -> {
                     return clientResponse.toEntity(ResponseEntity.class)
                             .map(response -> response.getStatusCode().value());

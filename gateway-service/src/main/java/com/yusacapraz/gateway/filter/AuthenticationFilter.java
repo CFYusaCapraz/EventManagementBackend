@@ -1,6 +1,6 @@
 package com.yusacapraz.gateway.filter;
 
-import com.yusacapraz.gateway.model.DTOs.ValidateDTO;
+import com.yusacapraz.gateway.model.DTOs.ValidateRequestDTO;
 import com.yusacapraz.gateway.service.GatewayService;
 import com.yusacapraz.gateway.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +37,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 if (token == null) {
                     throw new RuntimeException("Missing `Bearer` prefix in the authorization header value");
                 }
-                ValidateDTO validateDTO = ValidateDTO.builder()
+                ValidateRequestDTO validateRequestDTO = ValidateRequestDTO.builder()
                         .token(token)
                         .requestPath(exchange.getRequest().getPath().toString()).build();
 
-                return gatewayService.authenticateToken(validateDTO)
+                return gatewayService.authenticateToken(validateRequestDTO)
                         .flatMap(statusCode -> {
                             if (statusCode == HttpStatus.OK.value()) {
                                 return chain.filter(exchange);
