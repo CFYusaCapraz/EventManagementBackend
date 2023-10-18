@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ public class RefreshTokenService {
         if (userOptional.isPresent()) {
             RefreshToken refreshToken = RefreshToken.builder()
                     .refreshToken(UUID.randomUUID())
-                    .expiryDate(Instant.now().plusMillis(3600000)) // 1 Hour refresh token expiry time
+                    .expiryDate(LocalDateTime.now().plusHours(1)) // 1 Hour refresh token expiry time
                     .user(userOptional.get())
                     .build();
             refreshTokenRepository.save(refreshToken);
