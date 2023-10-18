@@ -1,7 +1,7 @@
 package com.yusacapraz.auth.controller;
 
-import com.yusacapraz.auth.model.DTOs.LoginDTO;
-import com.yusacapraz.auth.model.DTOs.ValidateDTO;
+import com.yusacapraz.auth.model.DTOs.LoginRequestDTO;
+import com.yusacapraz.auth.model.DTOs.ValidateRequestDTO;
 import com.yusacapraz.auth.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +17,12 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        return authenticationService.login(loginDTO);
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+        return authenticationService.login(loginRequestDTO);
     }
 
     @PostMapping("/validateToken")
-    public ResponseEntity<?> validateToken(@RequestBody ValidateDTO validateDTO) {
-        return authenticationService.validateToken(validateDTO);
+    public ResponseEntity<?> validateToken(@RequestBody ValidateRequestDTO validateRequestDTO) {
+        return authenticationService.validateToken(validateRequestDTO);
     }
 }

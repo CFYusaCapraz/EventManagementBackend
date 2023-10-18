@@ -1,9 +1,9 @@
 package com.yusacapraz.auth.service;
 
 import com.yusacapraz.auth.model.APIResponse;
-import com.yusacapraz.auth.model.DTOs.LoginDTO;
+import com.yusacapraz.auth.model.DTOs.LoginRequestDTO;
 import com.yusacapraz.auth.model.DTOs.LoginResponseDTO;
-import com.yusacapraz.auth.model.DTOs.ValidateDTO;
+import com.yusacapraz.auth.model.DTOs.ValidateRequestDTO;
 import com.yusacapraz.auth.model.DTOs.ValidateResponseDTO;
 import com.yusacapraz.auth.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -24,12 +24,12 @@ public class AuthenticationService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    public ResponseEntity<APIResponse<?>> login(LoginDTO loginDTO) {
+    public ResponseEntity<APIResponse<?>> login(LoginRequestDTO loginRequestDTO) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginDTO.getUsername(),
-                            loginDTO.getPassword()
+                            loginRequestDTO.getUsername(),
+                            loginRequestDTO.getPassword()
                     )
             );
             String token = jwtTokenProvider.generateToken(authentication);
@@ -46,9 +46,9 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<APIResponse<?>> validateToken(ValidateDTO validateDTO) {
+    public ResponseEntity<APIResponse<?>> validateToken(ValidateRequestDTO validateRequestDTO) {
         try {
-            if (jwtTokenProvider.validateToken(validateDTO.getToken())) {
+            if (jwtTokenProvider.validateToken(validateRequestDTO.getToken())) {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (!authentication.isAuthenticated()) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
