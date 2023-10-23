@@ -24,7 +24,7 @@ public class CityController {
     }
 
     @GetMapping("/{cityId}")
-    public ResponseEntity<APIResponse<?>> getCityByCityId(@PathVariable("cityName") Integer cityId) {
+    public ResponseEntity<APIResponse<?>> getCityByCityId(@PathVariable("cityId") Integer cityId) {
         return cityService.getCityById(cityId);
     }
 

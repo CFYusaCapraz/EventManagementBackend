@@ -24,7 +24,7 @@ public class CountryController {
     }
 
     @GetMapping("/{countryId}")
-    public ResponseEntity<APIResponse<?>> getCountryByCountryId(@PathVariable("countryName") Integer countryId) {
+    public ResponseEntity<APIResponse<?>> getCountryByCountryId(@PathVariable("countryId") Integer countryId) {
         return countryService.getCountryById(countryId);
     }
 
