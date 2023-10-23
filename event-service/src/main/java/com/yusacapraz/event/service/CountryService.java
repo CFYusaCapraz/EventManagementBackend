@@ -90,16 +90,14 @@ public class CountryService {
             if (countryId < 1) {
                 APIResponse<Object> response = APIResponse.error("Please provide a valid country id!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            } else if (countryUpdateDTO.getOldName().isEmpty() || countryUpdateDTO.getNewName().isEmpty()) {
-                APIResponse<Object> response = APIResponse.error("Please provide all fields required for updating the country information!");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            } else if (countryUpdateDTO.getNewName().equals(countryUpdateDTO.getOldName())) {
-                APIResponse<Object> response = APIResponse.error("Old name and the new name of the country cannot be the same!");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             Country country = countryRepository.findById(countryId)
                     .orElseThrow(() -> new CountryNotFoundException("Country of the given id not found!"));
-            country.setCountryName(countryUpdateDTO.getNewName());
+            if (countryUpdateDTO.getNewCountryName().equals(country.getCountryName())) {
+                APIResponse<Object> response = APIResponse.error("Old name and the new name of the country cannot be the same!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+            country.setCountryName(countryUpdateDTO.getNewCountryName());
             countryRepository.saveAndFlush(country);
             CountryViewDTO viewDTO = CountryMapper.viewMapper(country);
             APIResponse<CountryViewDTO> response = APIResponse.successWithData(viewDTO, "Country of the given name is updated successfully.");
@@ -108,7 +106,7 @@ public class CountryService {
             APIResponse<Object> response = APIResponse.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (DataIntegrityViolationException e) {
-            APIResponse<Object> response = APIResponse.error("Country of the given name `%s` is already exists!".formatted(countryUpdateDTO.getNewName()));
+            APIResponse<Object> response = APIResponse.error("Country of the given name `%s` is already exists!".formatted(countryUpdateDTO.getNewCountryName()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         } catch (Exception e) {
             APIResponse<Object> response = APIResponse.error("Some error occurred! Please contact IT!");

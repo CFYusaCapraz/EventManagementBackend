@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 public class CityUpdateDTO {
-    private String oldName;
-    private String newName;
+    private String newCityName;
 }

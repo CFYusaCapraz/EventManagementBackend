@@ -90,16 +90,14 @@ public class CityService {
             if (cityId < 1) {
                 APIResponse<Object> response = APIResponse.error("Please provide a valid city id!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            } else if (cityUpdateDTO.getOldName().isEmpty() || cityUpdateDTO.getNewName().isEmpty()) {
-                APIResponse<Object> response = APIResponse.error("Please provide all fields required for updating the city information!");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            } else if (cityUpdateDTO.getNewName().equals(cityUpdateDTO.getOldName())) {
-                APIResponse<Object> response = APIResponse.error("Old name and the new name of the city cannot be the same!");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             City city = cityRepository.findById(cityId)
                     .orElseThrow(() -> new CityNotFoundException("City of the given id not found!"));
-            city.setCityName(cityUpdateDTO.getNewName());
+            if (cityUpdateDTO.getNewCityName().equals(city.getCityName())) {
+                APIResponse<Object> response = APIResponse.error("Old name and the new name of the city cannot be the same!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+            city.setCityName(cityUpdateDTO.getNewCityName());
             cityRepository.saveAndFlush(city);
             CityViewDTO viewDTO = CityMapper.viewMapper(city);
             APIResponse<CityViewDTO> response = APIResponse.successWithData(viewDTO, "City of the given name is updated successfully.");
@@ -108,7 +106,7 @@ public class CityService {
             APIResponse<Object> response = APIResponse.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (DataIntegrityViolationException e) {
-            APIResponse<Object> response = APIResponse.error("City of the given name `%s` is already exists!".formatted(cityUpdateDTO.getNewName()));
+            APIResponse<Object> response = APIResponse.error("City of the given name `%s` is already exists!".formatted(cityUpdateDTO.getNewCityName()));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         } catch (Exception e) {
             APIResponse<Object> response = APIResponse.error("Some error occurred! Please contact IT!");
