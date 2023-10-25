@@ -27,14 +27,14 @@ public class Address {
     private Short doorNumber;
 
     @ManyToOne
-    @JoinColumn(name = "country_id", referencedColumnName = "countryId")
+    @JoinColumn(name = "country_id")
     private Country country;
 
     @ManyToOne
-    @JoinColumn(name = "city_id", referencedColumnName = "cityId")
+    @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "district_id", referencedColumnName = "districtId")
+    @JoinColumn(name = "district_id")
     private District district;
 }

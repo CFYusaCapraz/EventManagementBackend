@@ -25,11 +25,11 @@ public class Event {
     private String eventName;
 
     @ManyToOne
-    @JoinColumn(name = "organization_id", referencedColumnName = "orgId")
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @ManyToOne
-    @JoinColumn(name = "event_details_id", referencedColumnName = "eventDetailsId")
+    @JoinColumn(name = "event_details_id")
     private EventDetails eventDetails;
 
     @Column(name = "created_at")

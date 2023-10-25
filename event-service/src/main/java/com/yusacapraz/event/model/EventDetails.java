@@ -31,10 +31,10 @@ public class EventDetails {
     private Integer participantQuote;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "categoryId")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
+    @JoinColumn(name = "address_id")
     private Address address;
 }
