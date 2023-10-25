@@ -74,7 +74,16 @@ public class AddressMapper {
                 && !Objects.equals(address.getCountry().getCountryName(), addressUpdateDTO.getNewCountryName())) {
             address.setCountry(getCountryIfExists(addressUpdateDTO.getNewCountryName()));
         }
-        // complete the other fields
+
+        if (addressUpdateDTO.getNewCityName() != null
+                && !Objects.equals(address.getCity().getCityName(), addressUpdateDTO.getNewCityName())) {
+            address.setCity(getCityIfExists(addressUpdateDTO.getNewCityName()));
+        }
+
+        if (addressUpdateDTO.getNewDistrictName() != null
+                && !Objects.equals(address.getDistrict().getDistrictName(), addressUpdateDTO.getNewDistrictName())) {
+            address.setDistrict(getDistrictIfExists(addressUpdateDTO.getNewDistrictName()));
+        }
         return address;
     }
 

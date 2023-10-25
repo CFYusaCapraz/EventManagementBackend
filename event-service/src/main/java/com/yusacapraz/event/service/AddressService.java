@@ -91,8 +91,8 @@ public class AddressService {
             UUID uuid = UUID.fromString(addressId);
             Address address = addressRepository.findById(uuid)
                     .orElseThrow(() -> new AddressNotFoundException("Address of the given id not found!"));
-            Address updated = addressMapper.updateMapper(address, addressUpdateDTO);
-            AddressViewDTO viewDTO = addressMapper.viewMapper(updated);
+            Address updatedAddress = addressMapper.updateMapper(address, addressUpdateDTO);
+            AddressViewDTO viewDTO = addressMapper.viewMapper(updatedAddress);
             APIResponse<AddressViewDTO> response = APIResponse.successWithData(viewDTO, "Address information successfully updated.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (AddressNotFoundException | CountryNotFoundException | DistrictNotFoundException |
