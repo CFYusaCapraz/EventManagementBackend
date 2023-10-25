@@ -100,7 +100,7 @@ public class CityService {
             city.setCityName(cityUpdateDTO.getNewCityName());
             cityRepository.saveAndFlush(city);
             CityViewDTO viewDTO = CityMapper.viewMapper(city);
-            APIResponse<CityViewDTO> response = APIResponse.successWithData(viewDTO, "City of the given name is updated successfully.");
+            APIResponse<CityViewDTO> response = APIResponse.successWithData(viewDTO, "City of the given id is updated successfully.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (CityNotFoundException e) {
             APIResponse<Object> response = APIResponse.error(e.getMessage());

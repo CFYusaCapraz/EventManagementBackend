@@ -100,7 +100,7 @@ public class CountryService {
             country.setCountryName(countryUpdateDTO.getNewCountryName());
             countryRepository.saveAndFlush(country);
             CountryViewDTO viewDTO = CountryMapper.viewMapper(country);
-            APIResponse<CountryViewDTO> response = APIResponse.successWithData(viewDTO, "Country of the given name is updated successfully.");
+            APIResponse<CountryViewDTO> response = APIResponse.successWithData(viewDTO, "Country of the given id is updated successfully.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (CountryNotFoundException e) {
             APIResponse<Object> response = APIResponse.error(e.getMessage());

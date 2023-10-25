@@ -100,7 +100,7 @@ public class DistrictService {
             district.setDistrictName(districtUpdateDTO.getNewDistrictName());
             districtRepository.saveAndFlush(district);
             DistrictViewDTO viewDTO = DistrictMapper.viewMapper(district);
-            APIResponse<DistrictViewDTO> response = APIResponse.successWithData(viewDTO, "District of the given name is updated successfully.");
+            APIResponse<DistrictViewDTO> response = APIResponse.successWithData(viewDTO, "District of the given id is updated successfully.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (DistrictNotFoundException e) {
             APIResponse<Object> response = APIResponse.error(e.getMessage());
