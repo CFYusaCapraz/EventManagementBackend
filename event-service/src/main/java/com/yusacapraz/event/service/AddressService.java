@@ -42,7 +42,7 @@ public class AddressService {
             for (Address address : addressList) {
                 viewDTOS.add(addressMapper.viewMapper(address));
             }
-            APIResponse<List<AddressViewDTO>> response = APIResponse.successWithData(viewDTOS, "Here are all address.");
+            APIResponse<List<AddressViewDTO>> response = APIResponse.successWithData(viewDTOS, "Here are all addresses.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             APIResponse<Object> response = APIResponse.error("Some error occurred! Please contact IT!");
