@@ -1,7 +1,7 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.CityMapper;
-import com.yusacapraz.event.model.APIResponse;
+import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.City;
 import com.yusacapraz.event.model.DTOs.CityCreateDTO;
 import com.yusacapraz.event.model.DTOs.CityUpdateDTO;

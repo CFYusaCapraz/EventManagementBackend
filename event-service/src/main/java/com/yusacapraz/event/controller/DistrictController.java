@@ -1,6 +1,6 @@
 package com.yusacapraz.event.controller;
 
-import com.yusacapraz.event.model.APIResponse;
+import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.DTOs.DistrictCreateDTO;
 import com.yusacapraz.event.model.DTOs.DistrictUpdateDTO;
 import com.yusacapraz.event.service.DistrictService;

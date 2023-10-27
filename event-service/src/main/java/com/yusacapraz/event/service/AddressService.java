@@ -1,7 +1,7 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.AddressMapper;
-import com.yusacapraz.event.model.APIResponse;
+import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.Address;
 import com.yusacapraz.event.model.DTOs.AddressCreateDTO;
 import com.yusacapraz.event.model.DTOs.AddressUpdateDTO;

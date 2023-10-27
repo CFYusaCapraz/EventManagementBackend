@@ -1,4 +1,4 @@
-package com.yusacapraz.event.model;
+package com.yusacapraz.event.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.CategoryMapper;
-import com.yusacapraz.event.model.APIResponse;
+import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.Category;
 import com.yusacapraz.event.model.DTOs.CategoryCreateDTO;
 import com.yusacapraz.event.model.DTOs.CategoryUpdateDTO;

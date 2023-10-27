@@ -1,7 +1,7 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.DistrictMapper;
-import com.yusacapraz.event.model.APIResponse;
+import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.DTOs.DistrictCreateDTO;
 import com.yusacapraz.event.model.DTOs.DistrictUpdateDTO;
 import com.yusacapraz.event.model.DTOs.DistrictViewDTO;

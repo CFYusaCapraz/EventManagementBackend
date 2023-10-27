@@ -1,7 +1,7 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.CountryMapper;
-import com.yusacapraz.event.model.APIResponse;
+import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.Country;
 import com.yusacapraz.event.model.DTOs.CountryCreateDTO;
 import com.yusacapraz.event.model.DTOs.CountryUpdateDTO;
