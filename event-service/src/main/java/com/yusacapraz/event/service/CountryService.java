@@ -1,13 +1,13 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.CountryMapper;
-import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.Country;
 import com.yusacapraz.event.model.DTOs.CountryCreateDTO;
 import com.yusacapraz.event.model.DTOs.CountryUpdateDTO;
 import com.yusacapraz.event.model.DTOs.CountryViewDTO;
 import com.yusacapraz.event.model.exception.CountryNotFoundException;
 import com.yusacapraz.event.repository.CountryRepository;
+import com.yusacapraz.event.response.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -93,6 +93,10 @@ public class CountryService {
             }
             Country country = countryRepository.findById(countryId)
                     .orElseThrow(() -> new CountryNotFoundException("Country of the given id not found!"));
+            if (countryUpdateDTO.getNewCountryName().isEmpty()) {
+                APIResponse<Object> response = APIResponse.error("Please provide a valid country name!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             if (countryUpdateDTO.getNewCountryName().equals(country.getCountryName())) {
                 APIResponse<Object> response = APIResponse.error("Old name and the new name of the country cannot be the same!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

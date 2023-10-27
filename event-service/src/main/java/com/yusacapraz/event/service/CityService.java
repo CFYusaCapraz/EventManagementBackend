@@ -1,13 +1,13 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.CityMapper;
-import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.City;
 import com.yusacapraz.event.model.DTOs.CityCreateDTO;
 import com.yusacapraz.event.model.DTOs.CityUpdateDTO;
 import com.yusacapraz.event.model.DTOs.CityViewDTO;
 import com.yusacapraz.event.model.exception.CityNotFoundException;
 import com.yusacapraz.event.repository.CityRepository;
+import com.yusacapraz.event.response.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -93,6 +93,10 @@ public class CityService {
             }
             City city = cityRepository.findById(cityId)
                     .orElseThrow(() -> new CityNotFoundException("City of the given id not found!"));
+            if (cityUpdateDTO.getNewCityName().isEmpty()) {
+                APIResponse<Object> response = APIResponse.error("Please provide a valid city name!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             if (cityUpdateDTO.getNewCityName().equals(city.getCityName())) {
                 APIResponse<Object> response = APIResponse.error("Old name and the new name of the city cannot be the same!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);

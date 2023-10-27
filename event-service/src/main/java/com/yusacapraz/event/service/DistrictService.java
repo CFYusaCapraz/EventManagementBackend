@@ -1,13 +1,13 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.DistrictMapper;
-import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.DTOs.DistrictCreateDTO;
 import com.yusacapraz.event.model.DTOs.DistrictUpdateDTO;
 import com.yusacapraz.event.model.DTOs.DistrictViewDTO;
 import com.yusacapraz.event.model.District;
 import com.yusacapraz.event.model.exception.DistrictNotFoundException;
 import com.yusacapraz.event.repository.DistrictRepository;
+import com.yusacapraz.event.response.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -93,6 +93,10 @@ public class DistrictService {
             }
             District district = districtRepository.findById(districtId)
                     .orElseThrow(() -> new DistrictNotFoundException("District of the given id not found!"));
+            if (districtUpdateDTO.getNewDistrictName().isEmpty()) {
+                APIResponse<Object> response = APIResponse.error("Please provide a valid district name!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
             if (districtUpdateDTO.getNewDistrictName().equals(district.getDistrictName())) {
                 APIResponse<Object> response = APIResponse.error("Old name and the new name of the district cannot be the same!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
