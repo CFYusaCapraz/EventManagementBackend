@@ -19,12 +19,14 @@ import static com.yusacapraz.auth.util.KeyUtils.loadSecretKeyFromString;
 
 @Component
 public class JwtTokenProvider {
+    private final JwtConfig jwtConfig;
+    private final UserService userService;
 
     @Autowired
-    private JwtConfig jwtConfig;
-
-    @Autowired
-    private UserService userService;
+    public JwtTokenProvider(JwtConfig jwtConfig, UserService userService) {
+        this.jwtConfig = jwtConfig;
+        this.userService = userService;
+    }
 
     public String generateTokenWithAuthentication(Authentication authentication) {
         SecretKey secretKey = loadSecretKeyFromString(jwtConfig.getSecret());

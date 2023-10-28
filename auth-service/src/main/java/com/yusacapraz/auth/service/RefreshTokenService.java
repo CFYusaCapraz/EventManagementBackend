@@ -16,10 +16,14 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
+
     @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-    @Autowired
-    private UserRepository userRepository;
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.userRepository = userRepository;
+    }
 
     public RefreshToken createRefreshToken(String username) {
         Optional<User> userOptional = userRepository.findUserByUsernameAndIsDeletedIsFalse(username);

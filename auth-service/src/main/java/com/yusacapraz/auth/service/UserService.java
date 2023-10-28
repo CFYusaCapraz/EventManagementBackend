@@ -13,8 +13,12 @@ import java.util.UUID;
 
 @Service
 public class UserService {
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public UserDetails loadUserByUserId(UUID userId) {
         Optional<User> userOptional = userRepository.findUserByUserIdAndIsDeletedIsFalse(userId);

@@ -21,12 +21,16 @@ import java.util.UUID;
 
 @Service
 public class AuthenticationService {
+    private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Autowired
-    private RefreshTokenService refreshTokenService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    public AuthenticationService(RefreshTokenService refreshTokenService, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+        this.refreshTokenService = refreshTokenService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     public ResponseEntity<APIResponse<?>> login(LoginRequestDTO loginRequestDTO) {
         try {

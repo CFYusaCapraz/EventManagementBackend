@@ -10,10 +10,14 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class GatewayService {
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
 
-    public Mono<ResponseEntity<APIResponse>> authenticateToken(ValidateRequestDTO validateRequestDTO){
+    @Autowired
+    public GatewayService(WebClient.Builder webClientBuilder) {
+        this.webClientBuilder = webClientBuilder;
+    }
+
+    public Mono<ResponseEntity<APIResponse>> authenticateToken(ValidateRequestDTO validateRequestDTO) {
         return webClientBuilder
                 .build()
                 .post()
