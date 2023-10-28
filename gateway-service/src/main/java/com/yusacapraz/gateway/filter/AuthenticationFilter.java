@@ -11,6 +11,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
@@ -33,13 +34,26 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
+            exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
             if (routeValidator.isSecured.test(exchange.getRequest())) {
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new RuntimeException("Missing authorization header");
+                    exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    APIResponse<Object> response = APIResponse.error("Missing `Authorization` header!");
+                    return serializeResponseToJSON(response, objectMapper, exchange)
+                            .flatMap(jsonResponse -> exchange.getResponse()
+                                    .writeWith(Mono.just(exchange.getResponse().bufferFactory().wrap(jsonResponse.getBytes())))
+                                    .then(Mono.empty()));
                 }
                 String token = jwtUtils.resolveToken(exchange.getRequest());
                 if (token == null) {
-                    throw new RuntimeException("Missing `Bearer` prefix in the authorization header value");
+                    exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    APIResponse<Object> response = APIResponse.error("Missing `Bearer` prefix in the authorization header value!");
+                    return serializeResponseToJSON(response, objectMapper, exchange)
+                            .flatMap(jsonResponse -> exchange.getResponse()
+                                    .writeWith(Mono.just(exchange.getResponse().bufferFactory().wrap(jsonResponse.getBytes())))
+                                    .then(Mono.empty()));
                 }
                 ValidateRequestDTO validateRequestDTO = ValidateRequestDTO.builder()
                         .token(token)
