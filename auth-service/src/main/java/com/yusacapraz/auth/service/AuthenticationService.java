@@ -5,6 +5,7 @@ import com.yusacapraz.auth.model.DTOs.*;
 import com.yusacapraz.auth.model.RefreshToken;
 import com.yusacapraz.auth.model.exception.RefreshTokenExpiredException;
 import com.yusacapraz.auth.model.exception.RefreshTokenNotFoundException;
+import com.yusacapraz.auth.model.exception.UserAlreadyLoggedInException;
 import com.yusacapraz.auth.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,8 @@ public class AuthenticationService {
                             loginRequestDTO.getPassword()
                     )
             );
-            String accessToken = jwtTokenProvider.generateTokenWithAuthentication(authentication);
             String refreshToken = refreshTokenService.createRefreshToken(loginRequestDTO.getUsername()).getRefreshToken().toString();
+            String accessToken = jwtTokenProvider.generateTokenWithAuthentication(authentication);
 
             LoginResponseDTO responseDTO = LoginResponseDTO.builder()
                     .accessToken(accessToken)
@@ -51,8 +52,11 @@ public class AuthenticationService {
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (AuthenticationException ex) {
-            APIResponse<Object> response = APIResponse.error("Login unsuccessful.");
+            APIResponse<Object> response = APIResponse.error("Login unsuccessful!");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        } catch (UserAlreadyLoggedInException ex) {
+            APIResponse<Object> response = APIResponse.error(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
     }
 
