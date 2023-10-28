@@ -13,7 +13,7 @@ public class GatewayConfig {
     public RouteLocator routeLocator(RouteLocatorBuilder routeLocatorBuilder, AuthenticationFilter authenticationFilter) {
         return routeLocatorBuilder.routes()
                 .route("auth-service", r -> r.path("/api/auth/**").uri("lb://AUTH-SERVICE"))
-                .route("event-service", r -> r.path("/hello", "/h")
+                .route("event-service", r -> r.path("/api/event/**")
                         .filters(f -> f.filter(authenticationFilter.
                                 apply(new AuthenticationFilter.Config())))
                         .uri("lb://EVENT-SERVICE"))
