@@ -18,15 +18,16 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
-    @Autowired
-    private RouteValidator routeValidator;
-    @Autowired
-    private JwtUtils jwtUtils;
-    @Autowired
-    private GatewayService gatewayService;
+    private final RouteValidator routeValidator;
+    private final JwtUtils jwtUtils;
+    private final GatewayService gatewayService;
 
-    public AuthenticationFilter() {
+    @Autowired
+    public AuthenticationFilter(RouteValidator routeValidator, JwtUtils jwtUtils, GatewayService gatewayService) {
         super(Config.class);
+        this.routeValidator = routeValidator;
+        this.jwtUtils = jwtUtils;
+        this.gatewayService = gatewayService;
     }
 
     @Override
