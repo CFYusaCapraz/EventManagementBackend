@@ -5,6 +5,7 @@ import com.yusacapraz.auth.model.User;
 import com.yusacapraz.auth.model.exception.RefreshTokenExpiredException;
 import com.yusacapraz.auth.model.exception.RefreshTokenNotFoundException;
 import com.yusacapraz.auth.model.exception.UserAlreadyLoggedInException;
+import com.yusacapraz.auth.model.exception.UserAlreadyLoggedOutException;
 import com.yusacapraz.auth.repository.RefreshTokenRepository;
 import com.yusacapraz.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,4 +54,11 @@ public class RefreshTokenService {
         }
     }
 
+    public void logout(UUID uuid) throws UserAlreadyLoggedOutException {
+        refreshTokenRepository.findRefreshTokenByRefreshToken(uuid)
+                .ifPresentOrElse(refreshTokenRepository::delete,
+                        () -> {
+                            throw new UserAlreadyLoggedOutException("Refresh token of the user is already logged out!");
+                        });
+    }
 }

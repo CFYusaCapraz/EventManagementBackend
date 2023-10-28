@@ -6,6 +6,7 @@ import com.yusacapraz.auth.model.RefreshToken;
 import com.yusacapraz.auth.model.exception.RefreshTokenExpiredException;
 import com.yusacapraz.auth.model.exception.RefreshTokenNotFoundException;
 import com.yusacapraz.auth.model.exception.UserAlreadyLoggedInException;
+import com.yusacapraz.auth.model.exception.UserAlreadyLoggedOutException;
 import com.yusacapraz.auth.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,21 @@ public class AuthenticationService {
         } catch (RefreshTokenExpiredException e) {
             APIResponse<String> response = APIResponse.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+    public ResponseEntity<APIResponse<?>> logout(String refreshToken) {
+        try {
+            UUID uuid = UUID.fromString(refreshToken);
+            refreshTokenService.logout(uuid);
+            APIResponse<Object> response = APIResponse.success("User is logged out successfully.");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (IllegalArgumentException e) {
+            APIResponse<String> response = APIResponse.error("Please enter a valid refresh token!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (UserAlreadyLoggedOutException e) {
+            APIResponse<String> response = APIResponse.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 }
