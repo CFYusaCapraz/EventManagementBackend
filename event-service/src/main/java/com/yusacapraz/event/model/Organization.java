@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -28,10 +28,10 @@ public class Organization {
     private String orgDetails;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

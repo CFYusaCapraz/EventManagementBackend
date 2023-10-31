@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "permissions")
@@ -25,10 +25,10 @@ public class Permission {
     private String permissionName;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Service
@@ -35,7 +35,7 @@ public class RefreshTokenService {
                 });
         RefreshToken refreshToken = RefreshToken.builder()
                 .refreshToken(UUID.randomUUID())
-                .expiryDate(LocalDateTime.now().plusHours(1)) // 1 Hour refresh token expiry time
+                .expiryDate(ZonedDateTime.now().plusHours(1)) // 1 Hour refresh token expiry time
                 .user(user)
                 .build();
         refreshTokenRepository.saveAndFlush(refreshToken);
@@ -48,7 +48,7 @@ public class RefreshTokenService {
     }
 
     public void isRefreshTokenExpired(RefreshToken refreshToken) {
-        if (refreshToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+        if (refreshToken.getExpiryDate().isBefore(ZonedDateTime.now())) {
             throw new RefreshTokenExpiredException("Refresh token of the given token is expired at %s ! Please login again!"
                     .formatted(refreshToken.getExpiryDate().toString()));
         }

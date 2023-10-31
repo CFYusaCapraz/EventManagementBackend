@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +25,7 @@ public class EventDetails {
     private String eventDescription;
 
     @Column(name = "event_time")
-    private LocalDateTime eventTime;
+    private ZonedDateTime eventTime;
 
     @Column(name = "participant_quote")
     private Integer participantQuote;
