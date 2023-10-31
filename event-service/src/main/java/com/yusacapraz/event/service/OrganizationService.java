@@ -59,12 +59,12 @@ public class OrganizationService {
             OrganizationViewDTO viewDTO = OrganizationMapper.viewMapper(organization);
             APIResponse<OrganizationViewDTO> response = APIResponse.successWithData(viewDTO, "Organization of given id is found.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (OrganizationNotFoundException e) {
-            APIResponse<Object> response = APIResponse.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (IllegalArgumentException e) {
             APIResponse<Object> response = APIResponse.error("Please enter a valid organization id!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (OrganizationNotFoundException e) {
+            APIResponse<Object> response = APIResponse.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (Exception e) {
             APIResponse<Object> response = APIResponse.error("Some error occurred! Please contact IT!");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -153,12 +153,12 @@ public class OrganizationService {
             organizationRepository.saveAndFlush(organization);
             APIResponse<OrganizationViewDTO> response = APIResponse.success("Organization of the id `%s` is deleted successfully.".formatted(organizationId));
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (OrganizationNotFoundException e) {
-            APIResponse<Object> response = APIResponse.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (IllegalArgumentException e) {
             APIResponse<Object> response = APIResponse.error("Please enter a valid organization id!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (OrganizationNotFoundException e) {
+            APIResponse<Object> response = APIResponse.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (Exception e) {
             APIResponse<Object> response = APIResponse.error("Some error occurred! Please contact IT!");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);

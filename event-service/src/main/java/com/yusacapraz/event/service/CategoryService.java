@@ -1,13 +1,13 @@
 package com.yusacapraz.event.service;
 
 import com.yusacapraz.event.mapper.CategoryMapper;
-import com.yusacapraz.event.response.APIResponse;
 import com.yusacapraz.event.model.Category;
 import com.yusacapraz.event.model.DTOs.CategoryCreateDTO;
 import com.yusacapraz.event.model.DTOs.CategoryUpdateDTO;
 import com.yusacapraz.event.model.DTOs.CategoryViewDTO;
 import com.yusacapraz.event.model.exception.CategoryNotFoundException;
 import com.yusacapraz.event.repository.CategoryRepository;
+import com.yusacapraz.event.response.APIResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -54,12 +54,12 @@ public class CategoryService {
             CategoryViewDTO viewDTO = CategoryMapper.viewMapper(category);
             APIResponse<CategoryViewDTO> response = APIResponse.successWithData(viewDTO, "Category of given id is found.");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (CategoryNotFoundException e) {
-            APIResponse<Object> response = APIResponse.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (IllegalArgumentException e) {
             APIResponse<Object> response = APIResponse.error("Please enter a valid category id!");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (CategoryNotFoundException e) {
+            APIResponse<Object> response = APIResponse.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         } catch (Exception e) {
             APIResponse<Object> response = APIResponse.error("Some error occurred! Please contact IT!");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
